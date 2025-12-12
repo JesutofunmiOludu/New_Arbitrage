@@ -1,0 +1,8 @@
+[
+    {
+        "type": "command",
+        "details": {
+            "key": "Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force"
+        }
+    }
+]

@@ -1,0 +1,512 @@
+[
+  {
+    "name": "USDe\n(USDe)",
+    "symbol": "USDe",
+    "address": "0x5d3a1Ff2b6BAb83b63cd9AD0787074081a52ef34",
+    "change_percent": "0.05%"
+  },
+  {
+    "name": "Aave Token\n(AAVE)",
+    "symbol": "AAVE",
+    "address": "0x63706e401c06ac8513145b7687a14804d17f814b",
+    "change_percent": "1.92%"
+  },
+  {
+    "name": "Savings USDS\n(sUSDS)",
+    "symbol": "sUSDS",
+    "address": "0x5875eee11cf8398102fdad704c9e96607675467a",
+    "change_percent": "0.01%"
+  },
+  {
+    "name": "Spark USDC Vault\n(sUSDC)",
+    "symbol": "sUSDC",
+    "address": "0x3128a0f7f0ea68e7b7c9b00afa7e41045828e858",
+    "change_percent": "0.01%"
+  },
+  {
+    "name": "Aerodrome\n(AERO)",
+    "symbol": "AERO",
+    "address": "0x940181a94a35a4569e4529a3cdfb74e38fd98631",
+    "change_percent": "0.06%"
+  },
+  {
+    "name": "Pendle\n(PENDLE)",
+    "symbol": "PENDLE",
+    "address": "0xa99f6e6785da0f5d6fb42495fe424bce029eeb3e",
+    "change_percent": "2.59%"
+  },
+  {
+    "name": "Wrapped USDX\n(USDX)",
+    "symbol": "USDX",
+    "address": "0xf3527ef8de265eaa3716fb312c12847bfba66cef",
+    "change_percent": "0.10%"
+  },
+  {
+    "name": "Usual USD\n(USD0)",
+    "symbol": "USD0",
+    "address": "0x758a3e0b1f842c9306b783f8a4078c6c8c03a270",
+    "change_percent": "0.12%"
+  },
+  {
+    "name": "Wrapped sUSDX\n(sUSDX)",
+    "symbol": "sUSDX",
+    "address": "0x7788a3538c5fc7f9c7c8a74eac4c898fc8d87d92",
+    "change_percent": "0.46%"
+  },
+  {
+    "name": "Melania Meme\n(MELANIA)",
+    "symbol": "MELANIA",
+    "address": "0x813f392d21a55819be5e78157bfcdbd25530f4e8",
+    "change_percent": "11.27%"
+  },
+  {
+    "name": "Osaka Protocol\n(OSAK)",
+    "symbol": "OSAK",
+    "address": "0xbFd5206962267c7b4b4A8B3D76AC2E1b2A5c4d5e",
+    "change_percent": "3.83%"
+  },
+  {
+    "name": "YieldFi yUSD\n(yUSD)",
+    "symbol": "yUSD",
+    "address": "0x4772D2e014F9fC3a820C444e3313968e9a5C8121",
+    "change_percent": "0.10%"
+  },
+  {
+    "name": "Yala stablecoin\n(YU)",
+    "symbol": "YU",
+    "address": "0xe868084cf08f3c3db11f4b73a95473762d9463f7",
+    "change_percent": "0.05%"
+  },
+  {
+    "name": "Anzen USDz Bond\n(AnzBond)",
+    "symbol": "AnzBond",
+    "address": "0xa87c9808c0ebe20a1427b5c769623c77201f6f4d",
+    "change_percent": "0.06%"
+  },
+  {
+    "name": "USDz\n(USDz)",
+    "symbol": "USDz",
+    "address": "0x04D5ddf5f3a8939889F11E97f8c4BB48317F1938",
+    "change_percent": "0.06%"
+  },
+  {
+    "name": "pumpBTC\n(pumpBTC)",
+    "symbol": "pumpBTC",
+    "address": "0xF469fBD2abcd6B9de8E169d128226C0Fc90a012e",
+    "change_percent": "3.69%"
+  },
+  {
+    "name": "REI\n(REI)",
+    "symbol": "REI",
+    "address": "0x6b2504a03ca4d43d0d73776f6ad46dab2f2a4cfd",
+    "change_percent": "0.27%"
+  },
+  {
+    "name": "Zentry\n(ZENT)",
+    "symbol": "ZENT",
+    "address": "0xdf49c226ED9CF05Be0e38cdb86Df4E8A945158B1",
+    "change_percent": "0.70%"
+  },
+  {
+    "name": "Magic Internet Money\n(MIM)",
+    "symbol": "MIM",
+    "address": "0x4A3A6Dd60A34bB2Aba60D73B4C88315E9CeB6A3D",
+    "change_percent": "0.21%"
+  },
+  {
+    "name": "Hyperlane\n(HYPER)",
+    "symbol": "HYPER",
+    "address": "0xc9d23ed2adb0f551369946bd377f8644ce1ca5c4",
+    "change_percent": "2.84%"
+  },
+  {
+    "name": "Orderly Network\n(ORDER)",
+    "symbol": "ORDER",
+    "address": "0x4e200fe2f3efb977d5fd9c430a41531fb04d97b8",
+    "change_percent": "5.52%"
+  },
+  {
+    "name": "Curve.fi Factory Plain Pool: Overnight/Curve\n(USD+crvUSD-f)",
+    "symbol": "USD+crvUSD-f",
+    "address": "0xda3de145054ed30ee937865d31b500505c4bdfe7",
+    "change_percent": "0.01%"
+  },
+  {
+    "name": "USD+\n(USD+)",
+    "symbol": "USD+",
+    "address": "0xb79dd08ea68a908a97220c76d19a6aa9cbde4376",
+    "change_percent": "0.01%"
+  },
+  {
+    "name": "Maverick Token\n(MAV)",
+    "symbol": "MAV",
+    "address": "0x64b88c73a5dfa78d1713fe1b4c69a22d7e0faaa7",
+    "change_percent": "0.96%"
+  },
+  {
+    "name": "Dimo\n(DIMO)",
+    "symbol": "DIMO",
+    "address": "0x5eAA326fB2fc97fAcCe6A79A304876daD0F2e96c",
+    "change_percent": "115.59%"
+  },
+  {
+    "name": "PARTI Token\n(PARTI)",
+    "symbol": "PARTI",
+    "address": "0x59264f02d301281f3393e1385c0aefd446eb0f00",
+    "change_percent": "3.30%"
+  },
+  {
+    "name": "BOBO\n(BOBO)",
+    "symbol": "BOBO",
+    "address": "0x570b1533f6daa82814b25b62b5c7c4c55eb83947",
+    "change_percent": "2.02%"
+  },
+  {
+    "name": "TLOS\n(TLOS)",
+    "symbol": "TLOS",
+    "address": "0x7252c865c05378ffc15120f428dd65804dd0ce63",
+    "change_percent": "5.04%"
+  },
+  {
+    "name": "AITV\n(AITV)",
+    "symbol": "AITV",
+    "address": "0x45e4e92F5A94F4B741C9cb553FF8bE7B25Eb7dF5",
+    "change_percent": "0.31%"
+  },
+  {
+    "name": "Based Fartcoin\n(Fartcoin)",
+    "symbol": "Fartcoin",
+    "address": "0x2f6c17fa9f9bc3600346ab4e48c0701e1d5962ae",
+    "change_percent": "3.11%"
+  },
+  {
+    "name": "Alpha City\n(AMETA)",
+    "symbol": "AMETA",
+    "address": "0x90ec58ef4cc9f37b96de1e203b65bd4e6e79580e",
+    "change_percent": "24.34%"
+  },
+  {
+    "name": "True\n(TRUE)",
+    "symbol": "TRUE",
+    "address": "0x21cfcfc3d8f98fc728f48341d10ad8283f6eb7ab",
+    "change_percent": "28.20%"
+  },
+  {
+    "name": "yoVaultUSD\n(yoUSD)",
+    "symbol": "yoUSD",
+    "address": "0x0000000f2eb9f69274678c76222b35eec7588a65",
+    "change_percent": "0.02%"
+  },
+  {
+    "name": "Spheron Network\n(SPON)",
+    "symbol": "SPON",
+    "address": "0x080d43c2164afdbc3712422ce78ab902ccab5ca1",
+    "change_percent": "0.17%"
+  },
+  {
+    "name": "Frankencoin\n(ZCHF)",
+    "symbol": "ZCHF",
+    "address": "0xd4dd9e2f021bb459d5a5f6c24c12fe09c5d45553",
+    "change_percent": "0.07%"
+  },
+  {
+    "name": "BasedPepe\n(PEPE)",
+    "symbol": "PEPE",
+    "address": "0x52b492a33E447Cdb854c7FC19F1e57E8BfA1777D",
+    "change_percent": "8.13%"
+  },
+  {
+    "name": "PAID Network\n(PAID)",
+    "symbol": "PAID",
+    "address": "0x655A51e6803faF50D4acE80fa501af2F29C856cF",
+    "change_percent": "11.21%"
+  },
+  {
+    "name": "USD Base Coin\n(USDbC)",
+    "symbol": "USDbC",
+    "address": "0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca",
+    "change_percent": "0.08%"
+  },
+  {
+    "name": "Odos Token\n(ODOS)",
+    "symbol": "ODOS",
+    "address": "0xca73ed1815e5915489570014e024b7ebe65de679",
+    "change_percent": "4.50%"
+  },
+  {
+    "name": "Token Metrics AI\n(TMAI)",
+    "symbol": "TMAI",
+    "address": "0xca4569949699d56e1834efe9f58747ca0f151b01",
+    "change_percent": "0.37%"
+  },
+  {
+    "name": "DeHub\n(DHB)",
+    "symbol": "DHB",
+    "address": "0xD20ab1015f6a2De4a6FdDEbAB270113F689c2F7c",
+    "change_percent": "3.69%"
+  },
+  {
+    "name": "MetaInside by Virtuals\n(MIN)",
+    "symbol": "MIN",
+    "address": "0xbB59167235BF3588b357De6cD98Ca6f94D753C76",
+    "change_percent": "9.95%"
+  },
+  {
+    "name": "Splintershards\n(SPS)",
+    "symbol": "SPS",
+    "address": "0x578661e9a09eee6b2cd97d4ded1ccbae7b8516b9",
+    "change_percent": "3.06%"
+  },
+  {
+    "name": "ZARP Stablecoin\n(ZARP)",
+    "symbol": "ZARP",
+    "address": "0xb755506531786C8aC63B756BaB1ac387bACB0C04",
+    "change_percent": "0.16%"
+  },
+  {
+    "name": "MASQ\n(MASQ)",
+    "symbol": "MASQ",
+    "address": "0x45d9c101a3870ca5024582fd788f4e1e8f7971c3",
+    "change_percent": "1.04%"
+  },
+  {
+    "name": "Libertai\n(LTAI)",
+    "symbol": "LTAI",
+    "address": "0xf8b1b47aa748f5c7b5d0e80c726a843913eb573a",
+    "change_percent": "1.36%"
+  },
+  {
+    "name": "izumi Token\n(iZi)",
+    "symbol": "iZi",
+    "address": "0x60D01EC2D5E98Ac51C8B4cF84DfCCE98D527c747",
+    "change_percent": "0.29%"
+  },
+  {
+    "name": "Mynth\n(MNT)",
+    "symbol": "MNT",
+    "address": "0x26d3c0d9f4cc4c130097b6afdebe4f5e497e6bdf",
+    "change_percent": "0.38%"
+  },
+  {
+    "name": "Fuse Token\n(FUSE)",
+    "symbol": "FUSE",
+    "address": "0x01facC69EC7360640AA5898E852326752801674A",
+    "change_percent": "2.30%"
+  },
+  {
+    "name": "Presearch\n(PRE)",
+    "symbol": "PRE",
+    "address": "0x3816dd4bd44c8830c2fa020a5605bac72fa3de7a",
+    "change_percent": "3.46%"
+  },
+  {
+    "name": "BasisOS by Virtuals\n(BIOS)",
+    "symbol": "BIOS",
+    "address": "0x73cb479f2ccf77bad90bcda91e3987358437240a",
+    "change_percent": "94.64%"
+  },
+  {
+    "name": "Dor Technologies\n(DOR)",
+    "symbol": "DOR",
+    "address": "0xfe9885baff18074846aaa2d5541581adf068731d",
+    "change_percent": "9.79%"
+  },
+  {
+    "name": "ivault Token\n(IVT)",
+    "symbol": "IVT",
+    "address": "0x4b12507e171970b3acd48edfeb5bd1c676e61280",
+    "change_percent": "1.53%"
+  },
+  {
+    "name": "Neurobro by Virtuals\n(BRO)",
+    "symbol": "BRO",
+    "address": "0xc796E499CC8f599A2a8280825d8BdA92F7a895e0",
+    "change_percent": "0.15%"
+  },
+  {
+    "name": "Arbus by Virtuals\n(ARBUS)",
+    "symbol": "ARBUS",
+    "address": "0xBDC27118Ca76B375C6887b0ff068aFb03DfC21A0",
+    "change_percent": "12.29%"
+  },
+  {
+    "name": "Ratio1\n(R1)",
+    "symbol": "R1",
+    "address": "0x6444c6c2d527d85ea97032da9a7504d6d1448ecf",
+    "change_percent": "0.75%"
+  },
+  {
+    "name": "JoystreamERC20\n(JOY)",
+    "symbol": "JOY",
+    "address": "0x8761155c814c807cD3CcD15B256D69D3C10f198C",
+    "change_percent": "0.04%"
+  },
+  {
+    "name": "MAHA.xyz\n(MAHA)",
+    "symbol": "MAHA",
+    "address": "0x554bba833518793056CF105E66aBEA330672c0dE",
+    "change_percent": "0.12%"
+  },
+  {
+    "name": "WoofWork.io\n(WOOF)",
+    "symbol": "WOOF",
+    "address": "0xB3a9bd4861454bA94931ebFF410c3D828525dCe2",
+    "change_percent": "2.87%"
+  },
+  {
+    "name": "Beni\n(BENI)",
+    "symbol": "BENI",
+    "address": "0xde7a416ac821c77478340eebaa21b68297025ef3",
+    "change_percent": "3.28%"
+  },
+  {
+    "name": "Satori\n(SATORI)",
+    "symbol": "SATORI",
+    "address": "0xc1c37473079884cbfcf4905a97de361fed414b2b",
+    "change_percent": "2.18%"
+  },
+  {
+    "name": "Chia Warped DBX\n(wDBX)",
+    "symbol": "wDBX",
+    "address": "0x2dabffed5584dab0ca3f9a56ba849f97a08cad9a",
+    "change_percent": "0.74%"
+  },
+  {
+    "name": "PIGGY\n(PIGGY)",
+    "symbol": "PIGGY",
+    "address": "0xe3cf8dbcbdc9b220ddead0bd6342e245daff934d",
+    "change_percent": "3.81%"
+  },
+  {
+    "name": "Quadency Token\n(QUAD)",
+    "symbol": "QUAD",
+    "address": "0x9a54ed8d4343E8d89477285A5a0ca06Be4051ddA",
+    "change_percent": "1.64%"
+  },
+  {
+    "name": "whim.bet by Virtuals\n(WHIM)",
+    "symbol": "WHIM",
+    "address": "0x39a1CCE09D7354Ac2DB86c6b02924360a10E4793",
+    "change_percent": "8.71%"
+  },
+  {
+    "name": "TAIKAI Token\n(TKAI)",
+    "symbol": "TKAI",
+    "address": "0x1287a235474e0331c0975e373bdd066444d1bd35",
+    "change_percent": "0.73%"
+  },
+  {
+    "name": "AGIXBT by Virtuals\n(AGIXBT)",
+    "symbol": "AGIXBT",
+    "address": "0x81496F85AbaF8bd2e13D90379fdE86C533D8670D",
+    "change_percent": "10.34%"
+  },
+  {
+    "name": "BASED APU\n(APU)",
+    "symbol": "APU",
+    "address": "0x6f35720b272bf23832852b13ae9888c706e1a379",
+    "change_percent": "1.26%"
+  },
+  {
+    "name": "HealthSci.AI\n(HSAI)",
+    "symbol": "HSAI",
+    "address": "0x11A2021368f518Fa390d20308076B25C57292e83",
+    "change_percent": "9.04%"
+  },
+  {
+    "name": "GRAM Token\n(GRAM)",
+    "symbol": "GRAM",
+    "address": "0x856D602E73545deAA1491a3726cF628d49f74F51",
+    "change_percent": "6.24%"
+  },
+  {
+    "name": "SKAI\n(SKAI)",
+    "symbol": "SKAI",
+    "address": "0xe7399151b688a265f347693d358821a5a8c213ec",
+    "change_percent": "0.42%"
+  },
+  {
+    "name": "Media Token\n(MEDIA)",
+    "symbol": "MEDIA",
+    "address": "0x6E51B3a19F114013E5Dc09D0477a536c7E4e0207",
+    "change_percent": "3.73%"
+  },
+  {
+    "name": "Decrypting\n(DCRYPT)",
+    "symbol": "DCRYPT",
+    "address": "0x1dce1604933dafb2c894481c631db34134738a7d",
+    "change_percent": "2.26%"
+  },
+  {
+    "name": "Virtu by Virtuals\n(VIRTU)",
+    "symbol": "VIRTU",
+    "address": "0x41e0fe1317bd6e8944b037cd59b22d428c1434c2",
+    "change_percent": "1.15%"
+  },
+  {
+    "name": "CV AGENTLAUNCHER Token\n(CVAI)",
+    "symbol": "CVAI",
+    "address": "0x6b34d1c35689dba179c2eddf6a01530bbb1d28a8",
+    "change_percent": "26.71%"
+  },
+  {
+    "name": "aigmx by Virtuals\n(AIGMX)",
+    "symbol": "AIGMX",
+    "address": "0x56ca7ea740f54501cc6ffb2b6fb9ba46eaf8b51c",
+    "change_percent": "1.15%"
+  },
+  {
+    "name": "APOLLO AI by Virtuals\n(APL)",
+    "symbol": "APL",
+    "address": "0xb55fcd62ed44253c45735bde6703c44100935747",
+    "change_percent": "12.90%"
+  },
+  {
+    "name": "JOOCE\n(JOOCE)",
+    "symbol": "JOOCE",
+    "address": "0x100ce3e3391c00b6a52911313a4ea8d23c8a38d8",
+    "change_percent": "3.18%"
+  },
+  {
+    "name": "Larva Lads\n(LAD)",
+    "symbol": "LAD",
+    "address": "0x40e3eddf6d253bb734381a309437428f121c594b",
+    "change_percent": "4.53%"
+  },
+  {
+    "name": "AI Voice Agents\n(AIVA)",
+    "symbol": "AIVA",
+    "address": "0xbdb0e1c40a76c5113a023d685b419b90b01e3d61",
+    "change_percent": "1.05%"
+  },
+  {
+    "name": "Lambow\n(LAMBOW)",
+    "symbol": "LAMBOW",
+    "address": "0x4b61e2f1bbdee6d746209a693156952936f1702c",
+    "change_percent": "386.91%"
+  },
+  {
+    "name": "BINGO\n(BINGO)",
+    "symbol": "BINGO",
+    "address": "0x1e339a1785b8114eef43e471c49c6ca327479aca",
+    "change_percent": "5.75%"
+  },
+  {
+    "name": "Unio Coin\n(UNIO)",
+    "symbol": "UNIO",
+    "address": "0x01aaC2b594F7bdBeC740F0F1AA22910EbB4B74Ab",
+    "change_percent": "64.12%"
+  },
+  {
+    "name": "GOOEY GUYS\n(GOOEY)",
+    "symbol": "GOOEY",
+    "address": "0x60000eb0ac0c6c83d88e990066ac69466c35cf1c",
+    "change_percent": "0.35%"
+  },
+  {
+    "name": "DRINK\n(DRINK)",
+    "symbol": "DRINK",
+    "address": "0x2dc90Fa3a0f178ba4beE16CAc5D6c9A5a7B4C6cB",
+    "change_percent": "31.79%"
+  }
+]

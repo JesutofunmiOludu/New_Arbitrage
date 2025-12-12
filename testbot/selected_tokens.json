@@ -1,0 +1,22 @@
+{
+  "tokens": [
+    {
+      "address": "0x4200000000000000000000000000000000000006",
+      "name": "Wrapped Ether",
+      "symbol": "WETH",
+      "trend": "+"
+    },
+    {
+      "address": "0x940181a94a35a4569e4529a3cdfb74e38fd98631",
+      "name": "Aerodrome",
+      "symbol": "AERO",
+      "trend": "+"
+    },
+    {
+      "address": "0x3b86ad95859b6ab773f55f8d94b4b9d443ee931f",
+      "name": "Solv BTC",
+      "symbol": "SolvBTC",
+      "trend": "+"
+    }
+  ]
+}

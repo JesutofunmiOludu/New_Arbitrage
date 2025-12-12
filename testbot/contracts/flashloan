@@ -1,0 +1,380 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+
+// Balancer V3 Flash Loan Interface
+interface IBalancerVault {
+    function flashLoan(
+        address[] memory tokens,
+        uint256[] memory amounts,
+        bytes memory userData
+    ) external;
+}
+
+// Uniswap V2 Router Interface
+interface IUniswapV2Router {
+    function swapExactTokensForTokens(
+        uint amountIn,
+        uint amountOutMin,
+        address[] calldata path,
+        address to,
+        uint deadline
+    ) external returns (uint[] memory amounts);
+
+    function getAmountsOut(uint amountIn, address[] calldata path)
+        external view returns (uint[] memory amounts);
+}
+
+// PancakeSwap V2 Router Interface (same as Uniswap V2)
+interface IPancakeRouter {
+    function swapExactTokensForTokens(
+        uint amountIn,
+        uint amountOutMin,
+        address[] calldata path,
+        address to,
+        uint deadline
+    ) external returns (uint[] memory amounts);
+
+    function getAmountsOut(uint amountIn, address[] calldata path)
+        external view returns (uint[] memory amounts);
+}
+
+contract FlashLoanArbitrage is ReentrancyGuard, Ownable {
+    using SafeERC20 for IERC20;
+
+    // Balancer V3 Vault address on Base
+    IBalancerVault public constant BALANCER_VAULT = IBalancerVault(0xBA12222222228d8Ba445958a75a0704d566BF2C8);
+    
+    // DEX Router addresses on Base
+    IUniswapV2Router public constant UNISWAP_ROUTER = IUniswapV2Router(0x4752ba5DBc23f44D87826276BF6Fd6b1C372aD24);
+    IPancakeRouter public constant PANCAKE_ROUTER = IPancakeRouter(0x8cFe327CEc66d1C090Dd72bd0FF11d690C33a2Eb);
+    
+    // Supported stablecoins on Base
+    address public constant USDC = 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913;
+    address public constant USDbC = 0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA;
+    
+    // Events
+    event ArbitrageExecuted(
+        address indexed token,
+        uint256 flashLoanAmount,
+        uint256 profit,
+        address indexed user
+    );
+    
+    event FlashLoanCompleted(
+        address indexed token,
+        uint256 amount,
+        uint256 fee
+    );
+
+    // Struct to track arbitrage parameters
+    struct ArbitrageParams {
+        address tokenA;           // Token to arbitrage
+        address tokenB;           // Stable token (USDC/USDbC)
+        uint256 flashLoanAmount; // Amount to flash loan
+        address dexLowPrice;     // DEX with lower price (router address)
+        address dexHighPrice;    // DEX with higher price (router address)
+        address user;            // User who initiated the arbitrage
+        uint256 minProfit;       // Minimum profit threshold
+    }
+
+    // Mapping to track ongoing arbitrages
+    mapping(address => bool) public arbitrageInProgress;
+
+    modifier onlyWhenNotInProgress(address token) {
+        require(!arbitrageInProgress[token], "Arbitrage already in progress for this token");
+        _;
+    }
+
+    constructor() Ownable(msg.sender) {}
+
+    /**
+     * @dev Execute flash loan arbitrage
+     * @param params Arbitrage parameters
+     */
+    function executeArbitrage(ArbitrageParams calldata params) 
+        external 
+        onlyWhenNotInProgress(params.tokenA)
+        nonReentrant 
+    {
+        require(params.tokenA != address(0), "Invalid token address");
+        require(params.tokenB == USDC || params.tokenB == USDbC, "Only USDC/USDbC supported as stable");
+        require(params.flashLoanAmount > 0, "Flash loan amount must be > 0");
+        require(params.user != address(0), "Invalid user address");
+
+        // Mark arbitrage as in progress
+        arbitrageInProgress[params.tokenA] = true;
+
+        // Prepare flash loan
+        address[] memory tokens = new address[](1);
+        uint256[] memory amounts = new uint256[](1);
+        
+        tokens[0] = params.tokenB; // Borrow stable coin
+        amounts[0] = params.flashLoanAmount;
+
+        // Encode arbitrage parameters for the callback
+        bytes memory userData = abi.encode(params);
+
+        // Execute flash loan
+        BALANCER_VAULT.flashLoan(tokens, amounts, userData);
+    }
+
+    /**
+     * @dev Balancer flash loan callback
+     */
+    function receiveFlashLoan(
+        address[] memory tokens,
+        uint256[] memory amounts,
+        uint256[] memory feeAmounts,
+        bytes memory userData
+    ) external {
+        require(msg.sender == address(BALANCER_VAULT), "Only Balancer Vault can call this");
+        
+        // Decode parameters
+        ArbitrageParams memory params = abi.decode(userData, (ArbitrageParams));
+        
+        uint256 stableAmount = amounts[0];
+        uint256 flashLoanFee = feeAmounts[0];
+        uint256 totalRepayAmount = stableAmount + flashLoanFee;
+
+        // Execute arbitrage trades
+        uint256 profit = _executeArbitrageTrades(params, stableAmount);
+
+        // Ensure we have enough to repay the flash loan + fee
+        require(
+            IERC20(params.tokenB).balanceOf(address(this)) >= totalRepayAmount,
+            "Insufficient funds to repay flash loan"
+        );
+
+        // Ensure minimum profit requirement
+        require(profit >= params.minProfit, "Profit below minimum threshold");
+
+        // Transfer profit to user
+        if (profit > 0) {
+            IERC20(params.tokenB).safeTransfer(params.user, profit);
+        }
+
+        // Repay flash loan (Balancer automatically deducts from our balance)
+        // No explicit repayment needed for Balancer V3
+
+        // Mark arbitrage as completed
+        arbitrageInProgress[params.tokenA] = false;
+
+        emit ArbitrageExecuted(params.tokenA, stableAmount, profit, params.user);
+        emit FlashLoanCompleted(params.tokenB, stableAmount, flashLoanFee);
+    }
+
+    /**
+     * @dev Execute the arbitrage trades
+     */
+    function _executeArbitrageTrades(
+        ArbitrageParams memory params,
+        uint256 stableAmount
+    ) internal returns (uint256 profit) {
+        uint256 initialBalance = IERC20(params.tokenB).balanceOf(address(this));
+
+        // Step 1: Buy token on DEX with lower price
+        uint256 tokenAmount = _swapStableForToken(
+            params.tokenB,
+            params.tokenA,
+            stableAmount / 2, // Use half for first swap
+            params.dexLowPrice
+        );
+
+        // Step 2: Sell token on DEX with higher price
+        uint256 stableReceived = _swapTokenForStable(
+            params.tokenA,
+            params.tokenB,
+            tokenAmount,
+            params.dexHighPrice
+        );
+
+        // Step 3: Use remaining stable for second arbitrage if profitable
+        uint256 remainingStable = stableAmount / 2;
+        if (stableReceived > stableAmount / 2) {
+            // Execute second round if first was profitable
+            uint256 tokenAmount2 = _swapStableForToken(
+                params.tokenB,
+                params.tokenA,
+                remainingStable,
+                params.dexLowPrice
+            );
+            
+            stableReceived += _swapTokenForStable(
+                params.tokenA,
+                params.tokenB,
+                tokenAmount2,
+                params.dexHighPrice
+            );
+        }
+
+        uint256 finalBalance = IERC20(params.tokenB).balanceOf(address(this));
+        
+        // Calculate profit (should be positive for successful arbitrage)
+        if (finalBalance > initialBalance) {
+            profit = finalBalance - initialBalance;
+        }
+
+        return profit;
+    }
+
+    /**
+     * @dev Swap stable coin for target token
+     */
+    function _swapStableForToken(
+        address stableToken,
+        address targetToken,
+        uint256 stableAmount,
+        address router
+    ) internal returns (uint256 tokenAmount) {
+        IERC20(stableToken).safeIncreaseAllowance(router, stableAmount);
+
+        address[] memory path = new address[](2);
+        path[0] = stableToken;
+        path[1] = targetToken;
+
+        uint256[] memory amounts;
+        
+        if (router == address(UNISWAP_ROUTER)) {
+            amounts = UNISWAP_ROUTER.swapExactTokensForTokens(
+                stableAmount,
+                0, // Accept any amount of tokens out
+                path,
+                address(this),
+                block.timestamp + 300 // 5 minutes deadline
+            );
+        } else if (router == address(PANCAKE_ROUTER)) {
+            amounts = PANCAKE_ROUTER.swapExactTokensForTokens(
+                stableAmount,
+                0, // Accept any amount of tokens out
+                path,
+                address(this),
+                block.timestamp + 300 // 5 minutes deadline
+            );
+        } else {
+            revert("Unsupported DEX router");
+        }
+
+        tokenAmount = amounts[1];
+    }
+
+    /**
+     * @dev Swap target token for stable coin
+     */
+    function _swapTokenForStable(
+        address targetToken,
+        address stableToken,
+        uint256 tokenAmount,
+        address router
+    ) internal returns (uint256 stableAmount) {
+        IERC20(targetToken).safeIncreaseAllowance(router, tokenAmount);
+
+        address[] memory path = new address[](2);
+        path[0] = targetToken;
+        path[1] = stableToken;
+
+        uint256[] memory amounts;
+        
+        if (router == address(UNISWAP_ROUTER)) {
+            amounts = UNISWAP_ROUTER.swapExactTokensForTokens(
+                tokenAmount,
+                0, // Accept any amount of stable out
+                path,
+                address(this),
+                block.timestamp + 300 // 5 minutes deadline
+            );
+        } else if (router == address(PANCAKE_ROUTER)) {
+            amounts = PANCAKE_ROUTER.swapExactTokensForTokens(
+                tokenAmount,
+                0, // Accept any amount of stable out
+                path,
+                address(this),
+                block.timestamp + 300 // 5 minutes deadline
+            );
+        } else {
+            revert("Unsupported DEX router");
+        }
+
+        stableAmount = amounts[1];
+    }
+
+    /**
+     * @dev Get expected arbitrage profit (view function for bot to check)
+     */
+    function calculateArbitrageProfit(
+        address tokenA,
+        address tokenB,
+        uint256 amount,
+        address dexLowPrice,
+        address dexHighPrice
+    ) external view returns (uint256 expectedProfit, bool profitable) {
+        // This is a simplified calculation - in reality you'd want more sophisticated math
+        try this._simulateArbitrage(tokenA, tokenB, amount, dexLowPrice, dexHighPrice) 
+            returns (uint256 profit) {
+            expectedProfit = profit;
+            profitable = profit > 0;
+        } catch {
+            expectedProfit = 0;
+            profitable = false;
+        }
+    }
+
+    /**
+     * @dev Simulate arbitrage for profit calculation
+     */
+    function _simulateArbitrage(
+        address tokenA,
+        address tokenB,
+        uint256 amount,
+        address dexLowPrice,
+        address dexHighPrice
+    ) external view returns (uint256) {
+        // Get expected amounts from each DEX
+        address[] memory path = new address[](2);
+        path[0] = tokenB;
+        path[1] = tokenA;
+
+        uint256[] memory amountsLow;
+        uint256[] memory amountsHigh;
+
+        if (dexLowPrice == address(UNISWAP_ROUTER)) {
+            amountsLow = UNISWAP_ROUTER.getAmountsOut(amount, path);
+        } else if (dexLowPrice == address(PANCAKE_ROUTER)) {
+            amountsLow = PANCAKE_ROUTER.getAmountsOut(amount, path);
+        }
+
+        path[0] = tokenA;
+        path[1] = tokenB;
+
+        if (dexHighPrice == address(UNISWAP_ROUTER)) {
+            amountsHigh = UNISWAP_ROUTER.getAmountsOut(amountsLow[1], path);
+        } else if (dexHighPrice == address(PANCAKE_ROUTER)) {
+            amountsHigh = PANCAKE_ROUTER.getAmountsOut(amountsLow[1], path);
+        }
+
+        // Simple profit calculation (actual implementation would need to account for gas, slippage, etc.)
+        if (amountsHigh[1] > amount) {
+            return amountsHigh[1] - amount;
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * @dev Emergency withdraw function (only owner)
+     */
+    function emergencyWithdraw(address token, uint256 amount) external onlyOwner {
+        IERC20(token).safeTransfer(owner(), amount);
+    }
+
+    /**
+     * @dev Check if arbitrage is in progress for a token
+     */
+    function isArbitrageInProgress(address token) external view returns (bool) {
+        return arbitrageInProgress[token];
+    }
+}
