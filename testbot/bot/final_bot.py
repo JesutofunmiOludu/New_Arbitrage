@@ -254,10 +254,15 @@ class ArbitrageMonitor:
         except Exception: return None
 
     async def get_pair_address(self, tokenA: str, tokenB: str, dex_key: str) -> Optional[str]:
+        """
+        Get pair address from DEX factory, with validation.
+        Returns the pair address if it exists and is valid, None otherwise.
+        """
         try:
             factory_addr = self.w3.to_checksum_address(self.dexes[dex_key].factory_address)
             factory = self.w3.eth.contract(address=factory_addr, abi=self.factory_abi)
             
+            # Ensure addresses are checksummed (V2 standard)
             token_a_checksum = self.w3.to_checksum_address(tokenA)
             token_b_checksum = self.w3.to_checksum_address(tokenB)
             
@@ -266,19 +271,37 @@ class ArbitrageMonitor:
             logger.debug(f"  Token A: {token_a_checksum}")
             logger.debug(f"  Token B: {token_b_checksum}")
             
-            pair_addr = await asyncio.to_thread(factory.functions.getPair(token_a_checksum, token_b_checksum).call)
+            # Call getPair on the factory (V2 standard)
+            pair_addr = await asyncio.to_thread(
+                factory.functions.getPair(token_a_checksum, token_b_checksum).call
+            )
             
-            logger.debug(f"  Result: {pair_addr}")
+            logger.debug(f"  Factory returned: {pair_addr}")
             
+            # Check if pool doesn't exist (zero address)
             if pair_addr == '0x0000000000000000000000000000000000000000':
-                logger.debug(f"  ❌ Pool does not exist (zero address returned)")
+                logger.debug(f"  ❌ Pool does not exist (zero address)")
                 return None
-            else:
-                logger.debug(f"  ✅ Pool found at {pair_addr}")
+            
+            # Additional validation: verify the pair contract has the expected functions
+            try:
+                pair_contract = self.w3.eth.contract(address=pair_addr, abi=self.pair_abi)
+                # Try to call token0() to verify it's a valid pair contract
+                token0 = await asyncio.to_thread(pair_contract.functions.token0().call)
+                token1 = await asyncio.to_thread(pair_contract.functions.token1().call)
+                
+                logger.debug(f"  ✅ Valid pool found at {pair_addr}")
+                logger.debug(f"     Pool tokens: {token0} / {token1}")
                 return pair_addr
+                
+            except Exception as validation_error:
+                logger.error(f"  ❌ Pool address {pair_addr} returned by factory is not a valid pair contract: {validation_error}")
+                return None
                 
         except Exception as e:
             logger.error(f"Error checking pair on {dex_key}: {e}")
+            logger.debug(f"  Token A: {tokenA}")
+            logger.debug(f"  Token B: {tokenB}")
             return None
 
     async def estimate_gas_cost(self) -> float:
@@ -435,8 +458,60 @@ class ArbitrageMonitor:
                     
                     if entries:
                         for event in entries:
-                            # Log the event using the custom box
-                            logger.info(f"SWAP DETECTEDToken: {token_symbol} | DEX: {self.dexes[dex_key].name}")
+                            # Extract swap event details
+                            try:
+                                event_data = event.get('args', {})
+                                amount0In = event_data.get('amount0In', 0)
+                                amount1In = event_data.get('amount1In', 0)
+                                amount0Out = event_data.get('amount0Out', 0)
+                                amount1Out = event_data.get('amount1Out', 0)
+                                
+                                # Get token info from pair contract
+                                token0_addr = await asyncio.to_thread(pair_contract.functions.token0().call)
+                                token1_addr = await asyncio.to_thread(pair_contract.functions.token1().call)
+                                
+                                # Determine which token is which
+                                token0_decimals = await self.get_token_decimals(token0_addr)
+                                token1_decimals = await self.get_token_decimals(token1_addr)
+                                
+                                # Determine swap direction
+                                if amount0In > 0 and amount1Out > 0:
+                                    # Swapping token0 for token1
+                                    from_amount = amount0In / (10 ** token0_decimals)
+                                    to_amount = amount1Out / (10 ** token1_decimals)
+                                    from_token = token_symbol if token0_addr.lower() == token_address.lower() else stable_token
+                                    to_token = stable_token if token0_addr.lower() == token_address.lower() else token_symbol
+                                    price = to_amount / from_amount if from_amount > 0 else 0
+                                elif amount1In > 0 and amount0Out > 0:
+                                    # Swapping token1 for token0
+                                    from_amount = amount1In / (10 ** token1_decimals)
+                                    to_amount = amount0Out / (10 ** token0_decimals)
+                                    from_token = token_symbol if token1_addr.lower() == token_address.lower() else stable_token
+                                    to_token = stable_token if token1_addr.lower() == token_address.lower() else token_symbol
+                                    price = to_amount / from_amount if from_amount > 0 else 0
+                                else:
+                                    # Unknown swap pattern, skip detailed logging
+                                    logger.debug(f"Unusual swap pattern detected for {token_symbol}")
+                                    continue
+                                
+                                # Format the swap event details
+                                swap_details = (
+                                    f"┌──────────────────────────────────────────────┐\n"
+                                    f"│            📊 SWAP EVENT DETAILS             │\n"
+                                    f"└──────────────────────────────────────────────┘\n"
+                                    f"│ DEX: {self.dexes[dex_key].name}\n"
+                                    f"│ Price: {price:.6f} {to_token}/{from_token}\n"
+                                    f"│ Trade: Swapping\n"
+                                    f"│ From: {from_amount:.6f} {from_token}\n"
+                                    f"│ To: {to_amount:.6f} {to_token}"
+                                )
+                                
+                                logger.info(f"SWAP DETECTED{swap_details}")
+                                
+                            except Exception as parse_error:
+                                logger.debug(f"Could not parse swap event details: {parse_error}")
+                                # Fallback to simple log
+                                logger.info(f"SWAP DETECTEDToken: {token_symbol} | DEX: {self.dexes[dex_key].name}")
                             
                             # Immediately update price for this DEX
                             await self.update_price_for_dex(token, stable_token, dex_key)
